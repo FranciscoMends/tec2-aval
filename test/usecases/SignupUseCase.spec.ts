@@ -120,4 +120,30 @@ describe('SignupUseCase', () => {
 
   })
 
+  it('should not allow creating an account with an already registered email', async () => {
+    const existingAccount = new Account(
+      'Existing User',
+      'duplicate.email@example.com',
+      '123.456.789-00',
+      'ExistingPass123',
+      true,
+      false
+    );
+
+    const newAccountData = {
+      name: 'New User',
+      email: 'duplicate.email@example.com', 
+      cpf: '987.654.321-00',
+      password: 'NewPass123',
+      isPassenger: true,
+      isDriver: false,
+    };
+
+    accountRepository.findByEmail.mockResolvedValue(existingAccount);
+
+    await expect(signupUseCase.execute(newAccountData)).rejects.toThrow('Email is already in use');
+    expect(accountRepository.findByEmail).toHaveBeenCalledWith('duplicate.email@example.com');
+    expect(accountRepository.save).not.toHaveBeenCalled();
+  });
+
 });
