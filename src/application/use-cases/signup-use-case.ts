@@ -15,6 +15,7 @@ export class SignupUseCase {
   constructor(private readonly accountRepository: AccountRepository) {}
 
   public async execute(request: SignupRequest): Promise<Account> {
+    this.validateRequest(request)
     const accountExists = await this.accountRepository.findByEmail(request.email)
 
     if (accountExists) {
@@ -32,5 +33,16 @@ export class SignupUseCase {
     )
 
     return this.accountRepository.save(acount)
+  }
+
+  private validateRequest(request: SignupRequest): void {
+    this.validateEmail(request.email)
+  }
+
+  private validateEmail(email: string): void {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      throw new Error('Invalid email')
+    }
   }
 }
