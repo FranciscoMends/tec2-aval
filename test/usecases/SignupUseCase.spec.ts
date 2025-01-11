@@ -88,6 +88,9 @@ describe('SignupUseCase', () => {
     accountRepository.save.mockImplementation(mockSave);
     accountRepository.findByEmail.mockImplementation(mockFindByEmail);
 
+    mockFindByEmail.mockResolvedValueOnce(null)
+    mockFindByEmail.mockResolvedValueOnce(null)
+
     const firstAccountData = {
       name: 'First User',
       email: 'first.user@example.com',
@@ -97,13 +100,15 @@ describe('SignupUseCase', () => {
       isDriver: false,
     }
 
-    mockSave.mockRejectedValueOnce(firstAccountData)
+    mockSave.mockResolvedValueOnce(firstAccountData)
 
     const result1 = await signupUseCase.execute(firstAccountData);
     expect(result1).toEqual(expect.objectContaining(firstAccountData))
 
+    expect(accountRepository.save).toHaveBeenCalledWith(expect.objectContaining(firstAccountData))
+
     const secondAccountData = {
-      name: 'Second User',
+      name: 'First User',
       email: 'second.user@example.com',
       cpf: '072.099.700-37',
       password: 'SecondPass123',
@@ -111,10 +116,11 @@ describe('SignupUseCase', () => {
       isDriver: false,
     }
 
-    mockSave.mockRejectedValueOnce(secondAccountData)
+    mockSave.mockResolvedValueOnce(secondAccountData)
 
     const result2 = await signupUseCase.execute(secondAccountData);
     expect(result2).toEqual(expect.objectContaining(secondAccountData))
+
     expect(accountRepository.save).toHaveBeenCalledWith(expect.objectContaining(secondAccountData))
 
     expect(accountRepository.save).toHaveBeenCalledTimes(2)
