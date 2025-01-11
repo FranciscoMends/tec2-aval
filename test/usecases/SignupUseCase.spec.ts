@@ -167,7 +167,7 @@ describe('SignupUseCase', () => {
       data: {
         name: '', // Nome ausente
         email: 'user@example.com',
-        cpf: '123.456.789-00',
+        cpf: '072.099.700-37',
         password: 'SecurePass123',
         isPassenger: true,
         isDriver: false,
@@ -179,7 +179,7 @@ describe('SignupUseCase', () => {
       data: {
         name: 'User',
         email: '', // Email ausente
-        cpf: '123.456.789-00',
+        cpf: '072.099.700-37',
         password: 'SecurePass123',
         isPassenger: true,
         isDriver: false,
