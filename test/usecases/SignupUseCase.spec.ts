@@ -1,3 +1,4 @@
+import { SignupUseCase } from "@/application/use-cases/signup-use-case";
 import { Account } from "@/domain/entities/account";
 import { AccountRepository } from "@/infra/repositories";
 import { mock, MockProxy } from 'jest-mock-extended'
@@ -7,7 +8,10 @@ describe('SignupUseCase', () => {
   it('should create a passenger account with valid data', async () => {
 
     let accountRepository: MockProxy<AccountRepository>
+    let signupUseCase: SignupUseCase;
+
     accountRepository = mock<AccountRepository>();
+    signupUseCase = new SignupUseCase(accountRepository);
 
     const passager = {
       name: 'John Doe',
