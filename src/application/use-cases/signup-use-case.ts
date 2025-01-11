@@ -37,6 +37,26 @@ export class SignupUseCase {
 
   private validateRequest(request: SignupRequest): void {
     this.validateEmail(request.email)
+
+    if (!request.name || request.name.trim() === '') {
+      throw new Error('Name is required')
+    }
+
+    if (!request.password || request.password.length < 8) {
+      throw new Error('Password must be at least 8 characters')
+    }
+
+    if (!request.cpf || request.cpf.trim() === '' || request.cpf.length !== 14) {
+      throw new Error('Invalid CPF')
+    }
+
+    if (!request.isPassenger && !request.isDriver) {
+      throw new Error('At least one role (Passenger or Driver) must be selected')
+    }
+
+    if (request.isDriver && (!request.carPlate || request.carPlate.trim() === '')) {
+      throw new Error('Car plate is required for drivers')
+    }
   }
 
   private validateEmail(email: string): void {
