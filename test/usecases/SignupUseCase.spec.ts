@@ -1,3 +1,4 @@
+import { Account } from "@/domain/entities/account";
 
 
 describe('SignupUseCase', () => {
