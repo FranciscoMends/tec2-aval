@@ -161,4 +161,66 @@ describe('SignupUseCase', () => {
     expect(accountRepository.save).not.toHaveBeenCalled();
   });
 
+  const invalidDataSets = [
+    {
+      description: 'missing name',
+      data: {
+        name: '', // Nome ausente
+        email: 'user@example.com',
+        cpf: '123.456.789-00',
+        password: 'SecurePass123',
+        isPassenger: true,
+        isDriver: false,
+      },
+      errorMessage: 'Name is required',
+    },
+    {
+      description: 'missing email',
+      data: {
+        name: 'User',
+        email: '', // Email ausente
+        cpf: '123.456.789-00',
+        password: 'SecurePass123',
+        isPassenger: true,
+        isDriver: false,
+      },
+      errorMessage: 'Invalid email',
+    },
+    {
+      description: 'missing CPF',
+      data: {
+        name: 'User',
+        email: 'user@example.com',
+        cpf: '', // CPF ausente
+        password: 'SecurePass123',
+        isPassenger: true,
+        isDriver: false,
+      },
+      errorMessage: 'Invalid CPF',
+    },
+    {
+      description: 'missing password',
+      data: {
+        name: 'User',
+        email: 'user@example.com',
+        cpf: '072.099.700-37',
+        password: '', // Senha ausente
+        isPassenger: true,
+        isDriver: false,
+      },
+      errorMessage: 'Password must be at least 8 characters',
+    },
+  ];
+
+  invalidDataSets.forEach(({ description, data, errorMessage }) => {
+    it(`should not allow creating an account when ${description}`, async () => {
+      await expect(signupUseCase.execute(data)).rejects.toThrow(errorMessage);
+
+      // Garantir que o repositório não foi chamado
+      expect(accountRepository.findByEmail).not.toHaveBeenCalled();
+      expect(accountRepository.save).not.toHaveBeenCalled();
+    });
+  });
+
+
 });
