@@ -12,9 +12,15 @@ type SignupRequest = {
 }
 
 export class SignupUseCase {
-  constructor(private readonly accountRepository: AccountRepository) {}
+  constructor(private readonly accountRepository: AccountRepository) { }
 
   public async execute(request: SignupRequest): Promise<Account> {
+    const accountExists = await this.accountRepository.findByEmail(request.email)
+
+    if (accountExists) {
+      throw new Error('Account already exists')
+    }
+
     const acount = new Account(
       request.name,
       request.email,
