@@ -146,4 +146,19 @@ describe('SignupUseCase', () => {
     expect(accountRepository.save).not.toHaveBeenCalled();
   });
 
+  it('should not allow creating an account with an invalid email format', async () => {
+    const invalidEmailData = {
+      name: 'Invalid Email User',
+      email: 'invalid-email', // Email inválido
+      cpf: '123.456.789-00',
+      password: 'SecurePass123',
+      isPassenger: true,
+      isDriver: false,
+    };
+
+    await expect(signupUseCase.execute(invalidEmailData)).rejects.toThrow('Invalid email');
+    expect(accountRepository.findByEmail).not.toHaveBeenCalled();
+    expect(accountRepository.save).not.toHaveBeenCalled();
+  });
+
 });
