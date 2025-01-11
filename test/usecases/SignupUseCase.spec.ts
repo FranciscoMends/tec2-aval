@@ -1,4 +1,4 @@
-import { SignupUseCase } from "@/application/use-cases/signup-use-case";
+import { SignupUseCase } from "@/application/use-cases";
 import { Account } from "@/domain/entities/account";
 import { AccountRepository } from "@/infra/repositories";
 import { mock, MockProxy } from 'jest-mock-extended'
