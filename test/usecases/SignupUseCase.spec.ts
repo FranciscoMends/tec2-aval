@@ -70,12 +70,6 @@ describe('SignupUseCase', () => {
   });
 
   it('shold allow creating an account with duplicate CPF but different email', async () => {
-    let accountRepository: MockProxy<AccountRepository>
-    let signupUseCase: SignupUseCase;
-
-    accountRepository = mock<AccountRepository>();
-    signupUseCase = new SignupUseCase(accountRepository);
-
     const mockSave = jest.fn()
     const mockFindByEmail = jest.fn()
 
