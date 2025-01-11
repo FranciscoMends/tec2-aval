@@ -5,14 +5,15 @@ import { mock, MockProxy } from 'jest-mock-extended'
 
 
 describe('SignupUseCase', () => {
-  it('should create a passenger account with valid data', async () => {
+  let signupUseCase: SignupUseCase;
+  let accountRepository: MockProxy<AccountRepository>;
 
-    let accountRepository: MockProxy<AccountRepository>
-    let signupUseCase: SignupUseCase;
-
+  beforeEach(() => {
     accountRepository = mock<AccountRepository>();
     signupUseCase = new SignupUseCase(accountRepository);
+  });
 
+  it('should create a passenger account with valid data', async () => {
     const passager = {
       name: 'John Doe',
       email: 'john.doe@example.com',
@@ -40,13 +41,6 @@ describe('SignupUseCase', () => {
   });
 
   it('should create a driver account with valid data', async () => {
-
-    let accountRepository: MockProxy<AccountRepository>
-    let signupUseCase: SignupUseCase;
-
-    accountRepository = mock<AccountRepository>();
-    signupUseCase = new SignupUseCase(accountRepository);
-
     const driver = {
       name: 'John Doe',
       email: 'john.doe@example.com',
