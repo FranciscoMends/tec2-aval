@@ -1,8 +1,14 @@
 import { Account } from "@/domain/entities/account";
+import { AccountRepository } from "@/infra/repositories";
+import { mock, MockProxy } from 'jest-mock-extended'
 
 
 describe('SignupUseCase', () => {
-  it('should create a passenger account with valid data', async() => {
+  it('should create a passenger account with valid data', async () => {
+
+    let accountRepository: MockProxy<AccountRepository>
+    accountRepository = mock<AccountRepository>();
+
     const passager = {
       name: 'John Doe',
       email: 'john.doe@example.com',
