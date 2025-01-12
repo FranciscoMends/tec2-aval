@@ -37,19 +37,16 @@ export class SignupUseCase {
 
   private validateRequest(request: SignupRequest): void {
     this.validateEmail(request.email)
-    this.validateCpf(request.cpf)
 
     if (!request.name || request.name.trim() === '') {
       throw new Error('Name is required')
     }
 
-    if (!request.password || request.password.length < 8) {
+    if (!request.password || request.password.length < 8 || request.password.trim() === '') {
       throw new Error('Password must be at least 8 characters')
     }
 
-    if (!request.cpf || request.cpf.trim() === '' || request.cpf.length !== 14) {
-      throw new Error('Invalid CPF')
-    }
+    this.validateCpf(request.cpf)
 
     if (!request.isPassenger && !request.isDriver) {
       throw new Error('At least one role (Passenger or Driver) must be selected')

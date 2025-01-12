@@ -17,7 +17,7 @@ describe('SignupUseCase', () => {
     const passager = {
       name: 'John Doe',
       email: 'john.doe@example.com',
-      cpf: '072.099.700-37',
+      cpf: '610.814.510-25',
       password: 'SecurePass123',
       isPassenger: true,
       isDriver: false,
@@ -44,7 +44,7 @@ describe('SignupUseCase', () => {
     const driver = {
       name: 'John Doe',
       email: 'john.doe@example.com',
-      cpf: '072.099.700-37',
+      cpf: '610.814.510-25',
       password: 'SecurePass123',
       isPassenger: false,
       isDriver: true,
@@ -124,7 +124,7 @@ describe('SignupUseCase', () => {
     const existingAccount = new Account(
       'Existing User',
       'duplicate.email@example.com',
-      '123.456.789-00',
+      '072.099.700-37',
       'ExistingPass123',
       true,
       false
@@ -150,7 +150,7 @@ describe('SignupUseCase', () => {
     const invalidEmailData = {
       name: 'Invalid Email User',
       email: 'invalid-email', // Email inválido
-      cpf: '123.456.789-00',
+      cpf: '072.099.700-37',
       password: 'SecurePass123',
       isPassenger: true,
       isDriver: false,
@@ -199,6 +199,18 @@ describe('SignupUseCase', () => {
       errorMessage: 'Invalid CPF',
     },
     {
+      description: 'invalid CPF',
+      data: {
+        name: 'User',
+        email: 'user@example.com',
+        cpf: '123.456.789-00', // CPF inválido
+        password: 'SecurePass123',
+        isPassenger: true,
+        isDriver: false,
+      },
+      errorMessage: 'Invalid CPF',
+    },
+    {
       description: 'missing password',
       data: {
         name: 'User',
@@ -211,30 +223,16 @@ describe('SignupUseCase', () => {
       errorMessage: 'Password must be at least 8 characters',
     },
   ];
+  
 
   invalidDataSets.forEach(({ description, data, errorMessage }) => {
     it(`should not allow creating an account when ${description}`, async () => {
       await expect(signupUseCase.execute(data)).rejects.toThrow(errorMessage);
-
+  
       // Garantir que o repositório não foi chamado
       expect(accountRepository.findByEmail).not.toHaveBeenCalled();
       expect(accountRepository.save).not.toHaveBeenCalled();
     });
-  });
-
-  it('should not allow creating an account with an invalid CPF', async () => {
-    const invalidCpfData = {
-      name: 'Invalid CPF User',
-      email: 'user@example.com',
-      cpf: '123.456.789-00',
-      password: 'SecurePass123',
-      isPassenger: true,
-      isDriver: false,
-    };
-
-    await expect(signupUseCase.execute(invalidCpfData)).rejects.toThrow('Invalid CPF');
-    expect(accountRepository.findByEmail).not.toHaveBeenCalled();
-    expect(accountRepository.save).not.toHaveBeenCalled();
   });
 
 });
