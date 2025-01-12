@@ -34,4 +34,17 @@ describe(Account.name, () => {
     expect(account.getIsDriver()).toBe(true);
   });
 
+  it('should return an empty car plate if none is provided', () => {
+    const account = new Account(
+      'Jane Doe',
+      'jane.doe@example.com',
+      '98765432100',
+      'SecurePass456',
+      false,
+      true
+    );
+
+    expect(account.getCarPlate()).toBe('');
+  });
+
 })
