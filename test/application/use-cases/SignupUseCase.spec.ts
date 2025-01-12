@@ -6,7 +6,7 @@ import { AccountData } from "@/shared/types/account";
 import { mock, MockProxy } from 'jest-mock-extended'
 
 
-describe('SignupUseCase', () => {
+describe(SignupUseCase.name, () => {
   let signupUseCase: SignupUseCase;
   let accountRepository: MockProxy<AccountRepository>;
 
@@ -149,8 +149,17 @@ describe('SignupUseCase', () => {
       data: createAccountData({ password: '' }),
       errorMessage: 'Password must be at least 8 characters',
     },
+    {
+      description: 'missing car plate when driver',
+      data: createAccountData({ isPassenger: false, isDriver: true, carPlate: '' }),
+      errorMessage: 'Car plate is required for drivers',
+    },
+    {
+      description: 'no role selected',
+      data: createAccountData({ isPassenger: false, isDriver: false }),
+      errorMessage: 'At least one role (Passenger or Driver) must be selected',
+    }
   ];
-
 
   invalidDataSets.forEach(({ description, data, errorMessage }) => {
     it(`should not allow creating an account when ${description}`, async () => {

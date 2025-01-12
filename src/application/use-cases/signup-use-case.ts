@@ -7,7 +7,7 @@ export class SignupUseCase {
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly validator: Validator,
-  ) { }
+  ) {}
 
   public async execute(request: AccountData): Promise<Account> {
     this.validator.validate(request)
