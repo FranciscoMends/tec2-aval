@@ -2,6 +2,7 @@ import { SignupUseCase } from "@/application/use-cases";
 import { ValidationService } from "@/application/utils/ValidationService";
 import { Account } from "@/domain/entities/account";
 import { AccountRepository } from "@/infra/repositories";
+import { AccountData } from "@/shared/types/account";
 import { mock, MockProxy } from 'jest-mock-extended'
 
 
@@ -15,30 +16,34 @@ describe('SignupUseCase', () => {
     signupUseCase = new SignupUseCase(accountRepository, validationService);
   });
 
+  const createAccountData = (overrides: Partial<AccountData> = {}): AccountData => ({
+    name: "Default User",
+    email: "default.user@example.com",
+    cpf: "072.099.700-37",
+    password: "SecurePass123",
+    isPassenger: true,
+    isDriver: false,
+    carPlate: undefined,
+    ...overrides,
+  });
+
   it('should create a passenger account with valid data', async () => {
-    const passager = {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      cpf: '610.814.510-25',
-      password: 'SecurePass123',
-      isPassenger: true,
-      isDriver: false,
-    };
+    const passengerData = createAccountData({ isPassenger: true, isDriver: false });
 
     const createdAccount = new Account(
-      passager.name,
-      passager.email,
-      passager.cpf,
-      passager.password,
-      passager.isPassenger,
-      passager.isDriver
+      passengerData.name,
+      passengerData.email,
+      passengerData.cpf,
+      passengerData.password,
+      passengerData.isPassenger,
+      passengerData.isDriver
     )
 
     accountRepository.save.mockResolvedValue(createdAccount);
-    const result = await signupUseCase.execute(passager);
+    const result = await signupUseCase.execute(passengerData);
 
     expect(result).toEqual(createdAccount);
-    expect(accountRepository.save).toHaveBeenCalledWith(expect.objectContaining(passager));
+    expect(accountRepository.save).toHaveBeenCalledWith(expect.objectContaining(passengerData));
 
   });
 
@@ -225,12 +230,12 @@ describe('SignupUseCase', () => {
       errorMessage: 'Password must be at least 8 characters',
     },
   ];
-  
+
 
   invalidDataSets.forEach(({ description, data, errorMessage }) => {
     it(`should not allow creating an account when ${description}`, async () => {
       await expect(signupUseCase.execute(data)).rejects.toThrow(errorMessage);
-  
+
       // Garantir que o repositório não foi chamado
       expect(accountRepository.findByEmail).not.toHaveBeenCalled();
       expect(accountRepository.save).not.toHaveBeenCalled();

@@ -1,4 +1,4 @@
-export type SignupRequest = {
+export type AccountData = {
   name: string
   email: string
   cpf: string

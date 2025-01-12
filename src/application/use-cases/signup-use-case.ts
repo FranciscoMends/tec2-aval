@@ -1,15 +1,15 @@
 import { Validator } from '@/domain/contracts'
 import { Account } from '@/domain/entities'
 import { AccountRepository } from '@/infra/repositories'
-import { SignupRequest } from '@/shared/types/SignupRequest'
+import { AccountData } from '@/shared/types/account'
 
 export class SignupUseCase {
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly validator: Validator,
-  ) {}
+  ) { }
 
-  public async execute(request: SignupRequest): Promise<Account> {
+  public async execute(request: AccountData): Promise<Account> {
     this.validator.validate(request)
     const accountExists = await this.accountRepository.findByEmail(request.email)
 
