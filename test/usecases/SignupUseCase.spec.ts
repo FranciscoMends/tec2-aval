@@ -48,31 +48,23 @@ describe('SignupUseCase', () => {
   });
 
   it('should create a driver account with valid data', async () => {
-    const driver = {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      cpf: '610.814.510-25',
-      password: 'SecurePass123',
-      isPassenger: false,
-      isDriver: true,
-      carPlate: 'ABC-1234'
-    };
+    const driverData = createAccountData({ isPassenger: false, isDriver: true, carPlate: "ABC-1234" });
 
     const createdAccount = new Account(
-      driver.name,
-      driver.email,
-      driver.cpf,
-      driver.password,
-      driver.isPassenger,
-      driver.isDriver,
-      driver.carPlate
+      driverData.name,
+      driverData.email,
+      driverData.cpf,
+      driverData.password,
+      driverData.isPassenger,
+      driverData.isDriver,
+      driverData.carPlate
     )
 
     accountRepository.save.mockResolvedValue(createdAccount);
-    const result = await signupUseCase.execute(driver);
+    const result = await signupUseCase.execute(driverData);
 
     expect(result).toEqual(createdAccount);
-    expect(accountRepository.save).toHaveBeenCalledWith(expect.objectContaining(driver));
+    expect(accountRepository.save).toHaveBeenCalledWith(expect.objectContaining(driverData));
 
   });
 
@@ -86,40 +78,20 @@ describe('SignupUseCase', () => {
     mockFindByEmail.mockResolvedValueOnce(null)
     mockFindByEmail.mockResolvedValueOnce(null)
 
-    const firstAccountData = {
-      name: 'First User',
-      email: 'first.user@example.com',
-      cpf: '072.099.700-37',
-      password: 'FirstPass123',
-      isPassenger: true,
-      isDriver: false,
-    }
-
+    const firstAccountData = createAccountData({ email: "first.user@example.com" });
     mockSave.mockResolvedValueOnce(firstAccountData)
-
     const result1 = await signupUseCase.execute(firstAccountData);
     expect(result1).toEqual(expect.objectContaining(firstAccountData))
 
     expect(accountRepository.save).toHaveBeenCalledWith(expect.objectContaining(firstAccountData))
 
-    const secondAccountData = {
-      name: 'First User',
-      email: 'second.user@example.com',
-      cpf: '072.099.700-37',
-      password: 'SecondPass123',
-      isPassenger: true,
-      isDriver: false,
-    }
-
+    const secondAccountData = createAccountData({ email: "second.user@example.com" });
     mockSave.mockResolvedValueOnce(secondAccountData)
-
     const result2 = await signupUseCase.execute(secondAccountData);
     expect(result2).toEqual(expect.objectContaining(secondAccountData))
 
     expect(accountRepository.save).toHaveBeenCalledWith(expect.objectContaining(secondAccountData))
-
     expect(accountRepository.save).toHaveBeenCalledTimes(2)
-
     expect(accountRepository.findByEmail).toHaveBeenCalledWith('first.user@example.com')
     expect(accountRepository.findByEmail).toHaveBeenCalledWith('second.user@example.com')
 
@@ -128,23 +100,16 @@ describe('SignupUseCase', () => {
   })
 
   it('should not allow creating an account with an already registered email', async () => {
+    const existingAccountData = createAccountData({ email: "duplicate.email@example.com" });
     const existingAccount = new Account(
-      'Existing User',
-      'duplicate.email@example.com',
-      '072.099.700-37',
-      'ExistingPass123',
-      true,
-      false
-    );
+      existingAccountData.name,
+      existingAccountData.email,
+      existingAccountData.cpf,
+      existingAccountData.password,
+      existingAccountData.isPassenger,
+      existingAccountData.isDriver)
 
-    const newAccountData = {
-      name: 'New User',
-      email: 'duplicate.email@example.com',
-      cpf: '987.654.321-00',
-      password: 'NewPass123',
-      isPassenger: true,
-      isDriver: false,
-    };
+    const newAccountData = createAccountData({ email: "duplicate.email@example.com" });
 
     accountRepository.findByEmail.mockResolvedValue(existingAccount);
 
@@ -153,80 +118,35 @@ describe('SignupUseCase', () => {
     expect(accountRepository.save).not.toHaveBeenCalled();
   });
 
-  it('should not allow creating an account with an invalid email format', async () => {
-    const invalidEmailData = {
-      name: 'Invalid Email User',
-      email: 'invalid-email', // Email inválido
-      cpf: '072.099.700-37',
-      password: 'SecurePass123',
-      isPassenger: true,
-      isDriver: false,
-    };
-
-    await expect(signupUseCase.execute(invalidEmailData)).rejects.toThrow('Invalid email');
-    expect(accountRepository.findByEmail).not.toHaveBeenCalled();
-    expect(accountRepository.save).not.toHaveBeenCalled();
-  });
-
   const invalidDataSets = [
     {
       description: 'missing name',
-      data: {
-        name: '', // Nome ausente
-        email: 'user@example.com',
-        cpf: '072.099.700-37',
-        password: 'SecurePass123',
-        isPassenger: true,
-        isDriver: false,
-      },
+      data: createAccountData({ name: '' }),
       errorMessage: 'Name is required',
     },
     {
+      description: 'Invalid Email',
+      data: createAccountData({ email: 'invalid-email' }),
+      errorMessage: 'Invalid email',
+    },
+    {
       description: 'missing email',
-      data: {
-        name: 'User',
-        email: '', // Email ausente
-        cpf: '072.099.700-37',
-        password: 'SecurePass123',
-        isPassenger: true,
-        isDriver: false,
-      },
+      data: createAccountData({ email: '' }),
       errorMessage: 'Invalid email',
     },
     {
       description: 'missing CPF',
-      data: {
-        name: 'User',
-        email: 'user@example.com',
-        cpf: '', // CPF ausente
-        password: 'SecurePass123',
-        isPassenger: true,
-        isDriver: false,
-      },
+      data: createAccountData({ cpf: '' }),
       errorMessage: 'Invalid CPF',
     },
     {
       description: 'invalid CPF',
-      data: {
-        name: 'User',
-        email: 'user@example.com',
-        cpf: '123.456.789-00', // CPF inválido
-        password: 'SecurePass123',
-        isPassenger: true,
-        isDriver: false,
-      },
+      data: createAccountData({ cpf: '123.456.678-99' }),
       errorMessage: 'Invalid CPF',
     },
     {
       description: 'missing password',
-      data: {
-        name: 'User',
-        email: 'user@example.com',
-        cpf: '072.099.700-37',
-        password: '', // Senha ausente
-        isPassenger: true,
-        isDriver: false,
-      },
+      data: createAccountData({ password: '' }),
       errorMessage: 'Password must be at least 8 characters',
     },
   ];
@@ -236,7 +156,6 @@ describe('SignupUseCase', () => {
     it(`should not allow creating an account when ${description}`, async () => {
       await expect(signupUseCase.execute(data)).rejects.toThrow(errorMessage);
 
-      // Garantir que o repositório não foi chamado
       expect(accountRepository.findByEmail).not.toHaveBeenCalled();
       expect(accountRepository.save).not.toHaveBeenCalled();
     });
