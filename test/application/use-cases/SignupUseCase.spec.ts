@@ -1,8 +1,8 @@
 import { SignupUseCase } from "@/application/use-cases";
-import { ValidationService } from "@/application/utils/ValidationService";
+import { ValidationService } from "@/application/utils";
 import { Account } from "@/domain/entities/account";
 import { AccountRepository } from "@/infra/repositories";
-import { AccountData } from "@/shared/types/account";
+import { AccountData } from "@/shared/types";
 import { mock, MockProxy } from 'jest-mock-extended'
 
 

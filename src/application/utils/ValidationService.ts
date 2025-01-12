@@ -1,5 +1,5 @@
 import { Validator } from '@/domain/contracts/signup-validator'
-import { AccountData } from '@/shared/types/account'
+import { AccountData } from '@/shared/types'
 
 export class ValidationService implements Validator {
   validate(request: AccountData): void {

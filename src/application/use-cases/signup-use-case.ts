@@ -1,7 +1,7 @@
 import { Validator } from '@/domain/contracts'
 import { Account } from '@/domain/entities'
 import { AccountRepository } from '@/infra/repositories'
-import { AccountData } from '@/shared/types/account'
+import { AccountData } from '@/shared/types'
 
 export class SignupUseCase {
   constructor(
