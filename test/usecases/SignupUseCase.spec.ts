@@ -1,4 +1,5 @@
 import { SignupUseCase } from "@/application/use-cases";
+import { ValidationService } from "@/application/utils/ValidationService";
 import { Account } from "@/domain/entities/account";
 import { AccountRepository } from "@/infra/repositories";
 import { mock, MockProxy } from 'jest-mock-extended'
@@ -9,8 +10,9 @@ describe('SignupUseCase', () => {
   let accountRepository: MockProxy<AccountRepository>;
 
   beforeEach(() => {
+    const validationService = new ValidationService();
     accountRepository = mock<AccountRepository>();
-    signupUseCase = new SignupUseCase(accountRepository);
+    signupUseCase = new SignupUseCase(accountRepository, validationService);
   });
 
   it('should create a passenger account with valid data', async () => {
