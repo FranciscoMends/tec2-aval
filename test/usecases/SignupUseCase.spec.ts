@@ -132,7 +132,7 @@ describe('SignupUseCase', () => {
 
     const newAccountData = {
       name: 'New User',
-      email: 'duplicate.email@example.com', 
+      email: 'duplicate.email@example.com',
       cpf: '987.654.321-00',
       password: 'NewPass123',
       isPassenger: true,
@@ -167,7 +167,7 @@ describe('SignupUseCase', () => {
       data: {
         name: '', // Nome ausente
         email: 'user@example.com',
-        cpf: '123.456.789-00',
+        cpf: '072.099.700-37',
         password: 'SecurePass123',
         isPassenger: true,
         isDriver: false,
@@ -179,7 +179,7 @@ describe('SignupUseCase', () => {
       data: {
         name: 'User',
         email: '', // Email ausente
-        cpf: '123.456.789-00',
+        cpf: '072.099.700-37',
         password: 'SecurePass123',
         isPassenger: true,
         isDriver: false,
@@ -222,5 +222,19 @@ describe('SignupUseCase', () => {
     });
   });
 
+  it('should not allow creating an account with an invalid CPF', async () => {
+    const invalidCpfData = {
+      name: 'Invalid CPF User',
+      email: 'user@example.com',
+      cpf: '123.456.789-00',
+      password: 'SecurePass123',
+      isPassenger: true,
+      isDriver: false,
+    };
+
+    await expect(signupUseCase.execute(invalidCpfData)).rejects.toThrow('Invalid CPF');
+    expect(accountRepository.findByEmail).not.toHaveBeenCalled();
+    expect(accountRepository.save).not.toHaveBeenCalled();
+  });
 
 });
