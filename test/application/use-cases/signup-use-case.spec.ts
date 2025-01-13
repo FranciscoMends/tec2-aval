@@ -155,6 +155,11 @@ describe(SignupUseCase.name, () => {
       description: 'no role selected',
       data: createAccountData({ isPassenger: false, isDriver: false }),
       errorMessage: 'At least one role (Passenger or Driver) must be selected',
+    },
+    {
+      description: 'when passenger  has a car plate.',
+      data: createAccountData({ isPassenger: true, isDriver: false, carPlate: 'ABC-1234' }),
+      errorMessage: 'Car plate is not required for passengers',
     }
   ];
 
