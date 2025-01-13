@@ -1,1 +1,1 @@
-export * from './ValidationService'
+export * from './validation-service'

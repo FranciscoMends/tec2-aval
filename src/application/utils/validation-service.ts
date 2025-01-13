@@ -1,7 +1,7 @@
-import { Validator } from '@/domain/contracts/signup-validator'
+import { SignUpValidator } from '@/domain/contracts/signup-validator'
 import { AccountData } from '@/shared/types'
 
-export class ValidationService implements Validator {
+export class ValidationService implements SignUpValidator {
   validate(request: AccountData): void {
     this.validateEmail(request.email)
     this.validateName(request.name)

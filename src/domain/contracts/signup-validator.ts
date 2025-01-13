@@ -1,5 +1,5 @@
 import { AccountData } from '@/shared/types'
 
-export interface Validator {
+export interface SignUpValidator {
   validate(request: AccountData): void
 }

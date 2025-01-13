@@ -94,9 +94,6 @@ describe(SignupUseCase.name, () => {
     expect(accountRepository.save).toHaveBeenCalledTimes(2)
     expect(accountRepository.findByEmail).toHaveBeenCalledWith('first.user@example.com')
     expect(accountRepository.findByEmail).toHaveBeenCalledWith('second.user@example.com')
-
-
-
   })
 
   it('should not allow creating an account with an already registered email', async () => {

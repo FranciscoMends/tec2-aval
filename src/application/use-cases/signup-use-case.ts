@@ -1,4 +1,4 @@
-import { Validator } from '@/domain/contracts'
+import { SignUpValidator } from '@/domain/contracts'
 import { Account } from '@/domain/entities'
 import { AccountRepository } from '@/infra/repositories'
 import { AccountData } from '@/shared/types'
@@ -6,7 +6,7 @@ import { AccountData } from '@/shared/types'
 export class SignupUseCase {
   constructor(
     private readonly accountRepository: AccountRepository,
-    private readonly validator: Validator,
+    private readonly validator: SignUpValidator,
   ) {}
 
   public async execute(request: AccountData): Promise<Account> {
