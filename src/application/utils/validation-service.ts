@@ -15,6 +15,10 @@ export class ValidationService implements SignUpValidator {
     if (request.isDriver && (!request.carPlate || request.carPlate.trim() === '')) {
       throw new Error('Car plate is required for drivers')
     }
+
+    if (request.isPassenger && request.carPlate) {
+      throw new Error('Car plate is not required for passengers')
+    }
   }
 
   private validateEmail(email: string): void {
