@@ -23,7 +23,8 @@
     "rimraf": "^4"
   },
   "dependencies": {
-    "dotenv": "^16"
+    "dotenv": "^16",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@types/jest": "^29",

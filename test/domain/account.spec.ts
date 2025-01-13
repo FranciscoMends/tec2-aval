@@ -1,4 +1,5 @@
 import { Account } from "@/domain/entities";
+import { validate as isUuid } from 'uuid';
 
 describe(Account.name, () => {
   const createAccount = (
@@ -38,7 +39,7 @@ describe(Account.name, () => {
         true,
         'ABC-1234'
       );
-
+      expect(isUuid(account.getId())).toBe(true);
       expect(account.getName()).toBe('John Doe');
       expect(account.getEmail()).toBe('john.doe@example.com');
       expect(account.getCpf()).toBe('12345678900');
