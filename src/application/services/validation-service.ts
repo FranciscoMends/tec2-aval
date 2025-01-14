@@ -1,4 +1,4 @@
-import { SignUpValidator } from '@/domain/contracts/signup-validator'
+import { SignUpValidator } from '@/application/contracts/signup-validator'
 import { AccountData } from '@/shared/types'
 
 export class ValidationService implements SignUpValidator {

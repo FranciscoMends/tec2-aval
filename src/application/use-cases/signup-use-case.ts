@@ -1,6 +1,5 @@
-import { SignUpValidator } from '@/domain/contracts'
+import { AccountRepository, SignUpValidator } from '@/application/contracts'
 import { Account } from '@/domain/entities'
-import { AccountRepository } from '@/infra/repositories'
 import { AccountData } from '@/shared/types'
 
 export class SignupUseCase {
