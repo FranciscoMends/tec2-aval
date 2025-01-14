@@ -1,4 +1,4 @@
-import { AccountData } from '@/shared/types'
+import { AccountData } from '@/application/types'
 
 export interface SignUpValidator {
   validate(request: AccountData): void

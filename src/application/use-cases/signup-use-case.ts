@@ -1,6 +1,6 @@
 import { AccountRepository, SignUpValidator } from '@/application/contracts'
+import { AccountData } from '@/application/types'
 import { Account } from '@/domain/entities'
-import { AccountData } from '@/shared/types'
 
 export class SignupUseCase {
   constructor(
